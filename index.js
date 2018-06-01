@@ -55,6 +55,10 @@ function createServer(config) {
         sshConnection = bindSSHConnection(config, netConnection);
         sshConnection.on('error', server.emit.bind(server, 'error'));
 
+        if (config.keyboardInteractive) {
+            sshConnection.on('keyboard-interactive', config.keyboardInteractive);
+        }
+
         netConnection.on('sshStream', function (sshStream) {
             sshStream.on('error', function () {
                 server.close();
